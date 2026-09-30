@@ -34,7 +34,6 @@ pip install -r serve/requirements.txt   # fastapi / uvicorn / pydantic
 ## 三、启动命令
 
 ```bash
-cd deploy_hu     # 必须 cd 进目录(相对路径 + 模块名靠当前目录解析)
 
 # (A) 带库(推荐,=验收口径,A 档最强)
 MODEL_PATH=runs/spec_mid_L4A6/model_iter330.pt DB_PATH=/data/gto_lib_wide.db \
