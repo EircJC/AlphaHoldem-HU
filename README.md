@@ -7,10 +7,9 @@
 
 ## 一、部署文件(最简自包含)
 
-在完整项目根跑 `./make_deploy.sh` 会生成 `deploy_hu/`(自包含,可直接拷到服务器)。其内容:
 
 ```
-deploy_hu/
+AlphaHoldem-HU/
 ├── serve/            app.py bot.py engine_state.py __init__.py requirements.txt
 ├── engine/           cards.py evaluator.py hunl_env.py __init__.py
 ├── solver_data/      gto_lib_db.py 及其依赖(查库层;不连库可整个删)
@@ -47,7 +46,7 @@ python3 -m uvicorn serve.app:app --host 0.0.0.0 --port 8000
 
 看到 `[serve] 模型=... 库=... 河解=... 就绪` + `Uvicorn running on http://0.0.0.0:8000` 即成功。
 
-> ⚠ **关于 `gto_lib_wide.db`(约 136GB)**:体积过大**无法随包上传/分发**,不在 `deploy_hu/` 里,也不在代码仓库。
+> ⚠ **关于 `gto_lib_wide.db`(约 136GB)**:体积过大**无法随包上传/分发**,不在 `AlphaHoldem-HU/` 里,也不在代码仓库。
 > **需要带库(方式 A)部署的,请联系 Eric 获取该库文件**,放到服务器后把 `DB_PATH` 指向它。
 > 若暂时拿不到库,可先用**方式 B(纯 NN)**上线,库到位后加 `DB_PATH` 重启即可。
 
