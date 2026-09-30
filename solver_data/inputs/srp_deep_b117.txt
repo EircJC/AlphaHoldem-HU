@@ -1,0 +1,33 @@
+set_pot 5.00
+set_effective_stack 247.50
+set_board Qs,6h,3d
+set_range_ip 22,33,44,55,66,77,88,99,TT,JJ,QQ,KK,AA,A2s,A3s,A4s,A5s,A6s,A7s,A8s,A9s,ATs,AJs,AQs,AKs,K2s,K3s,K4s,K5s,K6s,K7s,K8s,K9s,KTs,KJs,KQs,Q6s,Q7s,Q8s,Q9s,QTs,QJs,J7s,J8s,J9s,JTs,T7s,T8s,T9s,97s,98s,86s,87s,75s,76s,65s,54s,A2o,A3o,A4o,A5o,A6o,A7o,A8o,A9o,ATo,AJo,AQo,AKo,K9o,KTo,KJo,KQo,Q9o,QTo,QJo,J9o,JTo,T9o,98o
+set_range_oop 22,33,44,55,66,77,88,99,TT,JJ,QQ,A2s,A3s,A4s,A5s,A6s,A7s,A8s,A9s,ATs,AJs,AQs,K5s,K6s,K7s,K8s,K9s,KTs,KJs,KQs,Q7s,Q8s,Q9s,QTs,QJs,J7s,J8s,J9s,JTs,T7s,T8s,T9s,96s,97s,98s,85s,86s,87s,75s,76s,64s,65s,54s,43s,A7o,A8o,A9o,ATo,AJo,AQo,K9o,KTo,KJo,KQo,Q9o,QTo,QJo,J9o,JTo,T8o,T9o,98o
+set_bet_sizes oop,flop,bet,50
+set_bet_sizes oop,flop,raise,50
+set_bet_sizes oop,flop,allin
+set_bet_sizes oop,turn,bet,66
+set_bet_sizes oop,turn,raise,50
+set_bet_sizes oop,turn,allin
+set_bet_sizes oop,river,bet,75
+set_bet_sizes oop,river,raise,50
+set_bet_sizes oop,river,allin
+set_bet_sizes ip,flop,bet,50
+set_bet_sizes ip,flop,raise,50
+set_bet_sizes ip,flop,allin
+set_bet_sizes ip,turn,bet,66
+set_bet_sizes ip,turn,raise,50
+set_bet_sizes ip,turn,allin
+set_bet_sizes ip,river,bet,75
+set_bet_sizes ip,river,raise,50
+set_bet_sizes ip,river,allin
+set_allin_threshold 0.67
+build_tree
+set_thread_num 8
+set_accuracy 0.5
+set_max_iteration 80
+set_print_interval 10
+set_use_isomorphism 1
+start_solve
+set_dump_rounds 2
+dump_result /Users/alan/Desktop/alphaholdem-python/solver_data/outputs/srp_deep_b117.json
