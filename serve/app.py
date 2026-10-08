@@ -65,8 +65,8 @@ class Action(BaseModel):
 
 
 class DecideReq(BaseModel):
-    table_id: str = "default"
-    hand_id: Optional[str] = None                            # 当前手牌 id(同桌可有多手);出参回传 + /hand_end 去重
+    table_id: str                                            # 必填:桌号(多桌隔离对手读数)
+    hand_id: str                                             # 必填:当前手牌 id(同桌可多手);出参回传 + /hand_end 去重
     hero_seat: int
     button: int
     sb: float = 0.5

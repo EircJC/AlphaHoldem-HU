@@ -7,7 +7,6 @@
 
 ## 一、部署文件(最简自包含)
 
-
 ```
 AlphaHoldem-HU/
 ├── serve/            app.py bot.py engine_state.py __init__.py requirements.txt
@@ -33,7 +32,7 @@ pip install -r serve/requirements.txt   # fastapi / uvicorn / pydantic
 ## 三、启动命令
 
 ```bash
-cd AlphaHoldem-HU/
+cd AlphaHoldem-HU     # 必须 cd 进目录(相对路径 + 模块名靠当前目录解析)
 
 # (A) 带库(推荐,=验收口径,A 档最强)
 MODEL_PATH=runs/spec_mid_L4A6/model_iter330.pt DB_PATH=/data/gto_lib_wide.db \
@@ -109,8 +108,8 @@ curl -s localhost:8000/health          # {"ok":true}
 
 | 字段 | 类型 | 必填 | 默认 | 说明 / 备注 |
 |---|---|---|---|---|
-| `table_id` | string | 否 | `"default"` | 桌号;多桌用不同值隔离对手读数 |
-| `hand_id` | string | 否 | `null` | 手牌 id(同桌可多手)。出参回传;`/hand_end` 按 `(table_id,hand_id)` 去重;不传则不去重 |
+| `table_id` | string | **是** | — | 桌号;多桌用不同值隔离对手读数 |
+| `hand_id` | string | **是** | — | 手牌 id(同桌可多手)。出参回传;`/hand_end` 按 `(table_id,hand_id)` 去重 |
 | `hero_seat` | int | **是** | — | 机器人座位 `0/1` |
 | `button` | int | **是** | — | 按钮(=小盲)座位 `0/1`;翻前先动、翻后有位置 |
 | `sb` | float | 否 | `0.5` | 小盲(bb 为单位) |

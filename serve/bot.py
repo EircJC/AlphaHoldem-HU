@@ -12,6 +12,7 @@ import os
 import platform
 import random
 import sys
+from collections import OrderedDict
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _ROOT = os.path.dirname(_HERE)
@@ -65,7 +66,8 @@ class PokerBot:
         import exploit_layer as exmod
         self._exmod = exmod
         self._trackers = {}                                   # table_id -> OpponentTracker
-        self._fed_hands = set()                               # (table_id,hand_id) 已喂读数的手 → /hand_end 去重
+        self._fed_hands = OrderedDict()                       # (table_id,hand_id)→None,FIFO 有界 → /hand_end 去重
+        self._fed_cap = 50000                                 # 上限;超了淘汰最老(防无限增长)
         # 站的 VPIP 下限:HU 默认 0.40;3 人桌(collapse 桥)调用方传 0.0(VPIP 被翻前弃牌稀释)
         self.station_loose_floor = float(station_loose_floor)
         self.tight_bluff_cut = bool(tight_bluff_cut)          # 3 人桌:对紧范围对手砍开口诈唬(HU 默认关)
@@ -171,9 +173,9 @@ class PokerBot:
             key = (table_id, hand_id)
             if key in self._fed_hands:
                 return
-            self._fed_hands.add(key)
-            if len(self._fed_hands) > 20000:                  # 有界:超量清一半旧的
-                self._fed_hands = set(list(self._fed_hands)[10000:])
+            self._fed_hands[key] = None
+            if len(self._fed_hands) > self._fed_cap:
+                self._fed_hands.popitem(last=False)           # FIFO 淘汰最老(set 切片会误删,故用 OrderedDict)
         hero = int(full_req["hero_seat"])
         history = es.build_history_only(full_req)
         self._tracker(table_id).update(history, 1 - hero)     # 跟踪【对手】(1-hero)
@@ -181,4 +183,4 @@ class PokerBot:
     def reset_table(self, table_id):
         """对手换人/换桌:清掉该桌对手读数 + 该桌已喂手记录。"""
         self._trackers.pop(table_id, None)
-        self._fed_hands = {k for k in self._fed_hands if k[0] != table_id}
+        self._fed_hands = OrderedDict((k, v) for k, v in self._fed_hands.items() if k[0] != table_id)
