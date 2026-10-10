@@ -7,6 +7,12 @@
   · 用【翻前 SRP 范围】近似河牌到达范围,忽略了翻/转的收窄 → 偏宽。粗糙但可用于 A/B 对比。
   · 任何失败(解算出错/超时/牌不在范围/导航失败)→ 返回 None,由调用方用模型动作兜底,不影响对局继续。
 
+【2026-10 下注档扩充】河牌下注档 33,75 → 33,75,125,200、加注档 50 → 50,100(见 _build_input)。
+  原因:旧档"75% 之上只剩 allin",坚果在河牌想极化超池下注时被逼到全下(曾对过弃对手拿坚果推 8x 池)。
+  加 125%/200% 中间超池档后,坚果有合理大注可选、不再乱推;映射层按占池比例就近归档(RAISE_FRACTIONS 到 3.0,
+  无需改映射)。代价:树更大、解更慢更吃内存。不影响 7 风格验收(那套不开河解)。范围假设宽、GTO 不剥削的
+  局限不变——对过弃弱 bot 仍建议关河解,此档主要为对 Slumbot 等会跟注的强对手保留更像样的河解。
+
 依赖 gto_feedback 的树导航;config 的档位;console_solver 二进制。
 """
 import json
@@ -118,8 +124,10 @@ def _build_input(out_json, board5, pot_bb, eff_bb, ip_range, oop_range, threads,
     L = [f"set_pot {pot_bb:.2f}", f"set_effective_stack {eff_bb:.2f}",
          f"set_board {board5}", f"set_range_ip {ip_range}", f"set_range_oop {oop_range}"]
     for pos in ("oop", "ip"):
-        L += [f"set_bet_sizes {pos},river,bet,33,75",
-              f"set_bet_sizes {pos},river,raise,50",
+        # 加中间超池档(125%/200% 下注、100% 加注):坚果/诈唬有合理的大注可选,
+        # 不会因"75% 之上只剩 allin"被逼到全下。映射层按占池比例就近归档(RAISE_FRACTIONS 覆盖到 3.0)。
+        L += [f"set_bet_sizes {pos},river,bet,33,75,125,200",
+              f"set_bet_sizes {pos},river,raise,50,100",
               f"set_bet_sizes {pos},river,allin"]
     L += ["set_allin_threshold 0.67", "build_tree", f"set_thread_num {threads}",
           f"set_accuracy {accuracy}", f"set_max_iteration {iters}", "set_print_interval 50",
