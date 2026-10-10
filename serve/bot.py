@@ -87,6 +87,10 @@ class PokerBot:
             self._trackers[table_id] = t
         return t
 
+    def opp_read(self, table_id):
+        """返回该桌对手当前画像 {n,loose(≈VPIP),pfr,af,call_ratio,label,confident}(只读,供日志展示)。"""
+        return self._tracker(table_id).read()
+
     def _river_bucket(self, env, hero):
         import river_solver as rs
         board5 = [card_str(c) for c in env.board]
