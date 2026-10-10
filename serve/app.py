@@ -117,3 +117,12 @@ def reset_table(req: TableReq):
     with _lock:
         _bot.reset_table(req.table_id)
     return {"ok": True}
+
+
+@app.get("/opp_read")
+def opp_read(table_id: str):
+    """只读:返回该桌对手当前画像 {n,loose,pfr,af,call_ratio,label,confident}(供对打日志展示)。"""
+    if _bot is None:
+        raise HTTPException(503, "bot 未就绪")
+    with _lock:
+        return _bot.opp_read(table_id)
